@@ -1,5 +1,10 @@
 # 🍛 Spice with Hassan – Authentic Pakistani Cuisine
 
+<p align="center">
+  <img src="media/app_mockup.png" width="45%" />
+  <img src="media/restaurant_aesthetic.png" width="45%" />
+</p>
+
 [![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
 [![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
