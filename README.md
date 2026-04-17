@@ -43,10 +43,12 @@
 - **UI Architecture**: Custom-built Design System with `react-native-paper`.
 - **Animations**: React Native Animated API for premium transitions.
 
-### Backend
+### Backend (NEW)
 - **Framework**: Node.js + Express.js
-- **Authentication**: JWT & Bcrypt for secure user sessions
-- **Validation**: Joi/Zod for robust API request validation
+- **Features**: 
+  - **Q1: Food Catalog API**: Serves a dynamic menu via `GET /catalog`.
+  - **Q2: Visual Catalog**: All food items include high-quality Unsplash image links.
+  - **Q3: Order Logger**: A `POST /order` endpoint that logs mobile orders to the server terminal.
 
 ---
 
@@ -55,26 +57,26 @@
 ### Prerequisites
 - Node.js (v18+)
 - Expo Go app
+- `npm install express cors` (for the backend)
 
 ### Installation & Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Hxni786/spice-with-hassan.git
+   git clone https://github.com/Hxni786/-A-Restaurant-App-Spice-with-Hassan.git
    cd spice-with-hassan
    ```
 
-2. **Backend Setup**
+2. **Run the Backend (Mandatory for Orders)**
    ```bash
-   cd backend
-   npm install
-   # Create a .env file with your JWT secret
-   npm start
+   # In the root or backend folder
+   node server.js
    ```
+   - **Catalog Link**: [http://localhost:5000/catalog](http://localhost:5000/catalog)
+   - **Working GitHub Link**: [Raw catalog.json](https://github.com/Hxni786/-A-Restaurant-App-Spice-with-Hassan/blob/main/catalog.json) (Click 'Raw' for text format)
 
 3. **Frontend Setup**
    ```bash
-   cd ../frontend
    npm install
    npx expo start
    ```
@@ -85,15 +87,10 @@
 
 ```text
 spice-with-hassan/
-├── backend/            # Express.js Server
-│   ├── models/         # Database schemas
-│   ├── routes/         # API endpoints
-│   ├── controllers/    # Business logic
-│   └── server.js       # Entry point
-├── frontend/           # React Native / Expo App
-│   ├── assets/         # Static resources
-│   ├── components/     # Reusable UI
-│   └── App.js          # App logic
+├── catalog.json        # Q1 & Q2: Static Catalog Data
+├── server.js           # Q3: Node.js Express Server & Logger
+├── App.js              # Frontend logic (integrates with server)
+├── media/              # Aesthetic project images
 └── README.md
 ```
 

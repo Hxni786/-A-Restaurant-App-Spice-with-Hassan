@@ -1096,9 +1096,9 @@ const LoginScreen = ({ onLogin }) => {
 };
 
 // ─── HOME TAB ─────────────────────────────────────────────────────────────────
-const HomeTab = ({ onMenu, onTable, cartCount, onCart }) => {
-  const featured = MENU.flatMap((c) => c.items)
-    .filter((i) => i.tag === "Signature" || i.tag === "Bestseller")
+const HomeTab = ({ menuData, onMenu, onTable, cartCount, onCart }) => {
+  const featured = menuData.flatMap((c) => c.items)
+    .filter((i) => i.rating >= 4.9)
     .slice(0, 4);
   
   return (
@@ -1238,7 +1238,7 @@ const HomeTab = ({ onMenu, onTable, cartCount, onCart }) => {
             gap: 9,
           }}
         >
-          {MENU.map((cat) => (
+          {menuData.map((cat) => (
             <TouchableOpacity
               key={cat.cat}
               onPress={() => Alert.alert(cat.cat, `${cat.items.length} items available`)}
@@ -1413,14 +1413,14 @@ const HomeTab = ({ onMenu, onTable, cartCount, onCart }) => {
 };
 
 // ─── MENU TAB ─────────────────────────────────────────────────────────────────
-const MenuTab = ({ cart, onAdd, onRem, onDetail, cartCount, onCart }) => {
+const MenuTab = ({ menuData, cart, onAdd, onRem, onDetail, cartCount, onCart }) => {
   const [ac, setAc] = useState(0);
   const [q, setQ] = useState("");
   const [sort, setSort] = useState("default");
-  const all = MENU.flatMap((c) => c.items);
+  const all = menuData.flatMap((c) => c.items);
   const base = q
     ? all.filter((i) => i.name.toLowerCase().includes(q.toLowerCase()))
-    : MENU[ac].items;
+    : (menuData[ac]?.items || []);
   const items = [...base].sort((a, b) =>
     sort === "price_asc"
       ? a.price - b.price
@@ -1533,7 +1533,7 @@ const MenuTab = ({ cart, onAdd, onRem, onDetail, cartCount, onCart }) => {
         {q === "" && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: "row", gap: 7, paddingBottom: 2 }}>
-              {MENU.map((cat, i) => (
+              {menuData.map((cat, i) => (
                 <TouchableOpacity
                   key={i}
                   onPress={() => setAc(i)}
@@ -3989,15 +3989,43 @@ const ProfileTab = () => {
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 const App = () => {
+  const SERVER_URL = "http://localhost:5000"; // Update with local IP for physical devices
   const [screen, setScreen] = useState("splash");
   const [tab, setTab] = useState("home");
   const [cart, setCart] = useState({});
+  const [menuContent, setMenuContent] = useState([]); // Dynamic menu state
   const [detail, setDetail] = useState(null);
   const [showCart, setShowCart] = useState(false);
   const [showPay, setShowPay] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const allItems = MENU.flatMap((c) => c.items);
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const res = await fetch(`${SERVER_URL}/catalog`);
+        if (!res.ok) throw new Error("Server not reachable");
+        const data = await res.json();
+        const formatted = [
+          {
+            cat: "Daily Specials",
+            icon: "🌟",
+            color: "#FF6B35",
+            items: data.daily_specials.map(item => ({
+              ...item,
+              img: item.image_url
+            }))
+          }
+        ];
+        setMenuContent(formatted);
+      } catch (err) {
+        console.error("Backend fetch failed, using internal fallback:", err);
+        setMenuContent(MENU); // Use local MENU as fallback
+      }
+    };
+    fetchMenu();
+  }, []);
+
+  const allItems = (menuContent.length > 0 ? menuContent : MENU).flatMap((c) => c.items);
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
   const cartTotal = allItems.reduce(
     (s, i) => s + (cart[i.id] || 0) * i.price,
@@ -4038,6 +4066,7 @@ const App = () => {
       <View style={{ flex: 1, paddingBottom: 78 }}>
         {tab === "home" && (
           <HomeTab
+            menuData={menuContent.length > 0 ? menuContent : MENU}
             onMenu={() => setTab("menu")}
             onTable={() => setTab("tables")}
             cartCount={cartCount}
@@ -4046,6 +4075,7 @@ const App = () => {
         )}
         {tab === "menu" && (
           <MenuTab
+            menuData={menuContent} // Pass the fetched menu
             cart={cart}
             onAdd={addItem}
             onRem={remItem}
@@ -4563,7 +4593,30 @@ const App = () => {
       {showPay && ( 
         <PaymentModal
           total={Math.round(cartTotal * 1.05)}
-          onSuccess={() => {
+          onSuccess={async () => {
+            // Q3: The Order Logger logic
+            try {
+              const orderData = {
+                user: "Syed Hassan Dildar",
+                total: Math.round(cartTotal * 1.05),
+                items: cartItems.map(i => ({
+                  name: i.name,
+                  quantity: cart[i.id],
+                  price: i.price
+                }))
+              };
+              
+              await fetch(`${SERVER_URL}/order`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+              });
+              
+              console.log("Order logged to server successfully!");
+            } catch (err) {
+              console.error("Order logging failed:", err);
+            }
+
             setShowPay(false);
             clearCart();
             setOrderPlaced(true);
