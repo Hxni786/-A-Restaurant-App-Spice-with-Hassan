@@ -13,6 +13,18 @@
 
 ---
 
+## 📱 Download the App
+
+<p align="center">
+  <a href="https://expo.dev/artifacts/eas/bHR2pYTCxXDs1qdBc2zsVP.apk">
+    <img src="media/download_card.png" width="90%" />
+  </a>
+  <br />
+  <b><a href="https://expo.dev/artifacts/eas/bHR2pYTCxXDs1qdBc2zsVP.apk">📥 Click here to Download the Android APK</a></b>
+</p>
+
+---
+
 ## ✨ Key Features
 
 ### 🛒 Seamless Food Ordering
