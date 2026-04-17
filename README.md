@@ -16,9 +16,22 @@
 ## 📱 Download the App
 
 <p align="center">
-  <a href="https://expo.dev/artifacts/eas/bHR2pYTCxXDs1qdBc2zsVP.apk">
-    <img src="media/download_card.png" width="90%" />
-  </a>
+  <table align="center" style="border: none;">
+    <tr>
+      <td align="center" style="border: none;">
+        <a href="https://expo.dev/artifacts/eas/bHR2pYTCxXDs1qdBc2zsVP.apk">
+          <img src="media/download_card.png" width="400" />
+        </a>
+      </td>
+      <td align="center" style="border: none;">
+        <a href="https://expo.dev/artifacts/eas/bHR2pYTCxXDs1qdBc2zsVP.apk">
+          <img src="media/working_qr.png" width="160" />
+        </a>
+        <br />
+        <p style="font-size: 11px; color: #FF6B35; font-weight: bold; margin-top: 10px;">SCAN TO INSTALL APK</p>
+      </td>
+    </tr>
+  </table>
   <br />
   <b><a href="https://expo.dev/artifacts/eas/bHR2pYTCxXDs1qdBc2zsVP.apk">📥 Click here to Download the Android APK</a></b>
 </p>
